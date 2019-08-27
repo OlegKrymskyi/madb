@@ -1,15 +1,13 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SharpAdbClient.Tests;
+﻿using SharpAdbClient.Tests;
 using System;
 using System.IO;
+using Xunit;
 
 namespace SharpAdbClient.Extensions.Tests
 {
-    [TestClass]
     public class AdbHelperIntegrationTests : BaseDeviceTests
     {
-        [TestMethod]
-        [TestCategory("IntegrationTest")]
+        [Fact]
         public void FileListingServiceTest()
         {
             Device device = GetFirstDevice();

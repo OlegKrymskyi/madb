@@ -1,23 +1,19 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
+using Xunit;
 
-namespace SharpAdbClient.Tests {
-    [TestClass]
-	public class BatteryInfoTests : BaseDeviceTests {
+namespace SharpAdbClient.Tests
+{
+    public class BatteryInfoTests : BaseDeviceTests
+    {
+        [Fact]
+        public void GetBatteryInfoTest()
+        {
+            Device device = GetFirstDevice();
+            Assert.NotNull(device);
 
-        [TestMethod]
-        [TestCategory("IntegrationTest")]
-		public void GetBatteryInfoTest ( ) {
-			Device device = GetFirstDevice ( );
-			Assert.IsNotNull ( device );
-
-			var batteryInfo = device.GetBatteryInfo ( );
-			Assert.IsTrue ( batteryInfo.Present );
-			Console.WriteLine ( batteryInfo.ToString ( ) );
-		}
-
-	}
+            var batteryInfo = device.GetBatteryInfo();
+            Assert.True(batteryInfo.Present);
+            Console.WriteLine(batteryInfo.ToString());
+        }
+    }
 }

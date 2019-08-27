@@ -1,12 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 
 namespace SharpAdbClient.Tests
 {
-    [TestClass]
     public class ListingServiceTests : BaseDeviceTests
     {
-        [TestMethod]
-        [TestCategory("IntegrationTest")]
+        [Fact]
         public void ResolveStorageDirectoryTest()
         {
             // Tests the path to the /storage/emulated/legacy folder on a Nexus 10 device.
@@ -17,10 +15,10 @@ namespace SharpAdbClient.Tests
             // contain symlinks - e.g. /storage/sdcard.
             // In previous builds, the /storage/ folder would be resolved to symlink of its children.
             FileEntry storage = fileListingService.FindFileEntry("/storage/");
-            Assert.AreEqual("/storage/", storage.FullResolvedPath);
+            Assert.Equal("/storage/", storage.FullResolvedPath);
 
             FileEntry apk = fileListingService.FindFileEntry("/storage/emulated/legacy/a584a9d6-1e29-4a4b-b8fb-23aa3f378b56.apk");
-            Assert.AreEqual("/mnt/shell/emulated/0/a584a9d6-1e29-4a4b-b8fb-23aa3f378b56.apk", apk.FullEscapedPath);
+            Assert.Equal("/mnt/shell/emulated/0/a584a9d6-1e29-4a4b-b8fb-23aa3f378b56.apk", apk.FullEscapedPath);
         }
     }
 }

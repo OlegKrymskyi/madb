@@ -1,16 +1,14 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SharpAdbClient.Exceptions;
+﻿using SharpAdbClient.Exceptions;
 using System;
 using System.Drawing.Imaging;
 using System.IO;
+using Xunit;
 
 namespace SharpAdbClient.Tests
 {
-    [TestClass]
     public class AdbHelperIntegrationTests : BaseDeviceTests
     {
-        [TestMethod]
-        [TestCategory("IntegrationTest")]
+        [Fact]
         public void DeviceGetMountPointsTest()
         {
             Device device = GetFirstDevice();
@@ -19,32 +17,30 @@ namespace SharpAdbClient.Tests
                 Console.WriteLine(device.MountPoints[item]);
             }
 
-            Assert.IsTrue(device.MountPoints.ContainsKey("/system"));
+            Assert.True(device.MountPoints.ContainsKey("/system"));
         }
 
-        [TestMethod]
-        [TestCategory("IntegrationTest")]
+        [Fact]
         public void DeviceRemountMountPointTest()
         {
             Device device = GetFirstDevice();
 
-            Assert.IsTrue(device.MountPoints.ContainsKey("/system"), "Device does not contain mount point /system");
+            Assert.True(device.MountPoints.ContainsKey("/system"), "Device does not contain mount point /system");
             bool isReadOnly = device.MountPoints["/system"].IsReadOnly;
 
             device.RemountMountPoint(device.MountPoints["/system"], !isReadOnly);
 
-            Assert.AreEqual<bool>(!isReadOnly, device.MountPoints["/system"].IsReadOnly);
+            Assert.Equal<bool>(!isReadOnly, device.MountPoints["/system"].IsReadOnly);
             Console.WriteLine("Successfully mounted /system as {0}", !isReadOnly ? "ro" : "rw");
 
             // revert it back...
             device.RemountMountPoint(device.MountPoints["/system"], isReadOnly);
-            Assert.AreEqual<bool>(isReadOnly, device.MountPoints["/system"].IsReadOnly);
+            Assert.Equal<bool>(isReadOnly, device.MountPoints["/system"].IsReadOnly);
             Console.WriteLine("Successfully mounted /system as {0}", isReadOnly ? "ro" : "rw");
 
         }
 
-        [TestMethod]
-        [TestCategory("IntegrationTest")]
+        [Fact]
         public void ExecuteRemoteCommandTest()
         {
 
@@ -85,7 +81,7 @@ namespace SharpAdbClient.Tests
             try
             {
                 device.ExecuteShellCommand("unknowncommand", creciever);
-                Assert.Fail();
+                throw new Xunit.Sdk.XunitException("");
             }
             catch (FileNotFoundException)
             {
@@ -96,7 +92,7 @@ namespace SharpAdbClient.Tests
             try
             {
                 device.ExecuteShellCommand("ls /system/foo", creciever);
-                Assert.Fail();
+                throw new Xunit.Sdk.XunitException("");
             }
             catch (FileNotFoundException)
             {
@@ -105,8 +101,7 @@ namespace SharpAdbClient.Tests
 
         }
 
-        [TestMethod]
-        [TestCategory("IntegrationTest")]
+        [Fact]
         public void ExecuteRemoteRootCommandTest()
         {
             Device device = GetFirstDevice();
@@ -138,7 +133,7 @@ namespace SharpAdbClient.Tests
                         device.ExecuteRootShellCommand("ls -lF", creciever);
                     }
 
-                    Assert.Fail();
+                    throw new Xunit.Sdk.XunitException("");
                 }
                 catch (PermissionDeniedException)
                 {
@@ -148,8 +143,7 @@ namespace SharpAdbClient.Tests
             }
         }
 
-        [TestMethod]
-        [TestCategory("IntegrationTest")]
+        [Fact]
         public void DeviceEnvironmentVariablesTest()
         {
             Device device = GetFirstDevice();
@@ -158,12 +152,11 @@ namespace SharpAdbClient.Tests
                 Console.WriteLine("{0}={1}", key, device.EnvironmentVariables[key]);
             }
 
-            Assert.IsTrue(device.EnvironmentVariables.Count > 0);
-            Assert.IsTrue(device.EnvironmentVariables.ContainsKey("ANDROID_ROOT"));
+            Assert.True(device.EnvironmentVariables.Count > 0);
+            Assert.True(device.EnvironmentVariables.ContainsKey("ANDROID_ROOT"));
         }
 
-        [TestMethod]
-        [TestCategory("IntegrationTest")]
+        [Fact]
         public void DevicePropertiesTest()
         {
             Device device = GetFirstDevice();
@@ -172,8 +165,8 @@ namespace SharpAdbClient.Tests
                 Console.WriteLine("[{0}]: {1}", key, device.Properties[key]);
             }
 
-            Assert.IsTrue(device.Properties.Count > 0);
-            Assert.IsTrue(device.Properties.ContainsKey("ro.product.device"));
+            Assert.True(device.Properties.Count > 0);
+            Assert.True(device.Properties.ContainsKey("ro.product.device"));
         }
     }
 }
