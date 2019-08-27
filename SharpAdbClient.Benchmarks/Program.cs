@@ -13,16 +13,16 @@ namespace SharpAdbClient.Benchmarks
     {
         static void Main(string[] args)
         {
-            //var summary = BenchmarkRunner.Run<FileUploadBufferSize>(
-            //    ManualConfig
-            //    .Create(DefaultConfig.Instance)
-            //    .With(Job.Clr
-            //        .WithWarmupCount(0)
-            //        .WithLaunchCount(1)
-            //        .WithTargetCount(3)));
+            var summary = BenchmarkRunner.Run<FileUploadBufferSize>(
+                ManualConfig
+                .Create(DefaultConfig.Instance)
+                .With(Job.Clr
+                    .WithWarmupCount(0)
+                    .WithLaunchCount(1)
+                    .WithTargetCount(3)));
 
-            //Console.WriteLine(summary);
-            //Console.ReadLine();
+            Console.WriteLine(summary);
+            Console.ReadLine();
         }
     }
 }
